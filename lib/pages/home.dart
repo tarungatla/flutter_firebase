@@ -78,11 +78,38 @@ class _HomeState extends State<Home> {
                                       color: Colors.orange,
                                     ),
                                   ),
-                                  SizedBox(width: 5,),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
                                   GestureDetector(
                                     onTap: () {
-                                      DatabaseMethods()
-                                          .deleteFriendDetails(ds['id']);
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text('Confirm Delete'),
+                                            content: Text(
+                                                'Are you sure you want to delete this friend?'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                child: Text('No'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                              TextButton(
+                                                child: Text('Yes'),
+                                                onPressed: () {
+                                                  DatabaseMethods()
+                                                      .deleteFriendDetails(
+                                                          ds['id']);
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
                                     },
                                     child: Icon(
                                       Icons.delete,
