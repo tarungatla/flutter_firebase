@@ -65,6 +65,7 @@ class _HomeState extends State<Home> {
                                       color: Colors.blue,
                                     ),
                                   ),
+                                  Spacer(),
                                   GestureDetector(
                                     onTap: () {
                                       editFriendDetails(ds['id']);
@@ -76,7 +77,18 @@ class _HomeState extends State<Home> {
                                       Icons.edit,
                                       color: Colors.orange,
                                     ),
-                                  )
+                                  ),
+                                  SizedBox(width: 5,),
+                                  GestureDetector(
+                                    onTap: () {
+                                      DatabaseMethods()
+                                          .deleteFriendDetails(ds['id']);
+                                    },
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: Colors.orange,
+                                    ),
+                                  ),
                                 ],
                               ),
                               Text(
