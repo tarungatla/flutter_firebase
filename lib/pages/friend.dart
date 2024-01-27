@@ -92,7 +92,9 @@ class _FriendState extends State<Friend> {
                     color: Colors.black,
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold)),
+
             const SizedBox(height: 10),
+
             Container(
               padding: const EdgeInsets.only(left: 10),
               decoration: BoxDecoration(
@@ -112,6 +114,7 @@ class _FriendState extends State<Friend> {
             ),
             //write an elevated button here
             const SizedBox(height: 10),
+            
             Center(
               child: ElevatedButton(
                 onPressed: () async {

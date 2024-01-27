@@ -12,4 +12,8 @@ class DatabaseMethods {
   Future<Stream<QuerySnapshot>> getFriendDetails() async {
     return await FirebaseFirestore.instance.collection("Friend").snapshots();
   }
+
+  Future updateFriendDetails(String id, Map<String, dynamic> details) async {
+    return await FirebaseFirestore.instance.collection("Friend").doc(id).update(details);
+  }
 }
