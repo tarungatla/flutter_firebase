@@ -1,5 +1,9 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/pages/friend.dart';
+import 'package:flutter_firebase/service/database.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -9,6 +13,89 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Stream? friendStream;
+
+  getonthereload() async {
+    friendStream = await DatabaseMethods().getFriendDetails();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getonthereload();
+    super.initState();
+  }
+
+  Widget allFriendDetails() {
+    return StreamBuilder(
+        stream: friendStream,
+        builder: (context, AsyncSnapshot snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot ds = snapshot.data.docs[index];
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: Material(
+                        elevation: 8,
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Name: ' + ds['name'],
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.edit,
+                                    color: Colors.orange,
+                                  )
+                                ],
+                              ),
+                              Text(
+                                'Age: ' + ds['age'],
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              Text(
+                                'Mobile no: ' + ds['mobile'],
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  })
+              : Container();
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,49 +134,7 @@ class _HomeState extends State<Home> {
         margin: EdgeInsets.only(left: 20, right: 20, top: 30),
         child: Column(
           children: [
-            Material(
-              elevation: 10,
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                padding: EdgeInsets.all(10),
-                width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Name: Tarunkumar Gatla',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
-                    ),
-                    Text(
-                      'Age: 20',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange,
-                      ),
-                    ),
-                    Text(
-                      'Mobile no.:8450995973',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
+            Expanded(child: allFriendDetails()),
           ],
         ),
       ),
